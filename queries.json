@@ -1,0 +1,74 @@
+[
+  {
+    "question": "What is the fee for current academic year",
+    "answer": "Select * from fee where current_academic_year is {current_academic_year}",
+    "entities": ["current_academic_year"],
+    "sub_questions": {
+      "current_academic_year": "Could you please provide the academic year? (eg: 2023-2024) : "
+    }
+  },
+  {
+    "question": "What is the fee details for the academic year 2023-24?",
+    "answer": "Select * from fee where current_academic_year is {current_academic_year}",
+    "entities": ["current_academic_year"],
+    "sub_questions": {
+      "current_academic_year": "Could you please provide the academic year? (eg: 2023-2024) : "
+    }
+  },
+  {
+    "question": "What is the fee details for the academic year 2023-2024?",
+    "answer": "Select * from fee where current_academic_year is 2023-2024",
+    "entities": ["current_academic_year"],
+    "sub_questions": {
+      "current_academic_year": "Could you please provide the academic year? (eg: 2023-2024) : "
+    }
+  },
+  {
+    "question": "What is the fee for grade 11 for current academic year",
+    "answer": "Select * from fee where grade is {grade} and current_academic_year is {current_academic_year}",
+    "entities": ["grade", "current_academic_year"],
+    "sub_questions": {
+      "current_academic_year": "Could you please provide the academic year? (eg: 2023-2024) : ",
+      "grade": "Could you please provide the grade? (eg: 11th Grade) : "
+    },
+    "type": {
+      "current_academic_year": "DATE",
+      "grade": "NUM"
+    }
+  },
+  {
+    "question": "What is fee details for the academic year 2023-24 for grade 3?",
+    "answer": "Select * from fee where grade is {grade} and current_academic_year is {current_academic_year}",
+    "entities": ["grade", "current_academic_year"],
+    "sub_questions": {
+      "current_academic_year": "Could you please provide the academic year? (eg: 2023-2024) : ",
+      "grade": "Could you please provide the grade? (eg: 11th Grade) : "
+    },
+    "type": {
+      "current_academic_year": "ACADEMIC_YEAR",
+      "grade": "NUM"
+    }
+  },
+  {
+    "question": "What is fee details for the academic year 2023-24 for 11th Standard?",
+    "answer": "Select * from fee where grade is {grade} and current_academic_year is {current_academic_year}",
+    "entities": ["grade", "current_academic_year"],
+    "sub_questions": {
+      "current_academic_year": "Could you please provide the academic year? (eg: 2023-2024) : ",
+      "grade": "Could you please provide the grade? (eg: 11th Grade) : "
+    },
+    "type": {
+      "current_academic_year": "DATE",
+      "grade": "NUM"
+    }
+  },
+  {
+    "question": "What is the total number of students",
+    "answer": "Select count(*) from students",
+    "entities": []
+  },
+  {
+    "question": "Hi",
+    "answer": "Hi how can I help you"
+  }
+]

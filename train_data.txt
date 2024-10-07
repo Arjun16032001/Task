@@ -1,0 +1,11 @@
+"What is the fee for academic year 2023-2024 for class 10"
+"What is the fee for academic year 2023-2024 for class 10?",
+"Can you tell me the tuition fees for Grade 8 in the academic year 2024-2025?",
+"I would like to know the fee structure for Class 9 for the year 2023-2024.",
+"What are the fees for Grade 6 for the academic year 2023-2024?",
+"Could you provide the fee details for Class 11 in 2023-2024?",
+"What is the total fee for academic year 2022-2023 for Grade 7?",
+"Please tell me the tuition fee for Class 10 in 2023-2024.",
+"What are the charges for Grade 12 for the academic year 2024-2025?",
+"Can I get the fee information for Class 8 in the year 2023-2024?",
+"What is the fee for Grade 5 in academic year 2022-2023?"
