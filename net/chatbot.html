@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Chatbot - Brave Coder</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="title">Simple Chatbot</div>
+        <div class="chatbox" id="chat-box">
+              <!-- Typing indicator will be shown/hidden here -->
+        </div>
+        <div class="typing-indicator" id="typing-indicator">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span>Chatbot is thinking</span>
+        </div>
+        <div class="typing-area">
+            <div class="input-field">
+                <input type="text" id="user-message" placeholder="Type your message" required>
+                <button id="send-btn" type="button">Send</button>
+            </div>
+        </div>
+    </div>
+ 
+    <script>
+        // Initialize an array to store conversation history
+        let conversationHistory = [];
+        let jester = null;
+   
+        function handleSend() {
+            const message = document.getElementById('user-message').value.trim();
+            if (message === "") return;
+   
+            // Auto-scroll to the bottom of the chatbox
+            document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
+   
+            // Add user's message to the chatbox and update conversation history
+            const userMessageHTML = `
+                <div class="item right">
+                    <div class="usermsg">
+                        <p>${sanitizeHTML(message)}</p>
+                    </div>
+                </div>`;
+            document.getElementById('chat-box').innerHTML += userMessageHTML;
+            conversationHistory.push({ role: 'user', content: message });
+   
+            // Show typing indicator
+            document.getElementById('typing-indicator').style.display = 'block';
+   
+            // Send the message and conversation history to the FastAPI backend
+            fetch('http://127.0.0.1:8000/handle_query', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                // body: JSON.stringify({ message, context: conversationHistory })
+                // body: JSON.stringify({ input_sentence: message, question_type: jester ? jester.question_type : "question", entities: jester ? jester.entities : null, entity: jester ? jester.entity : null, matched_question: jester ? jester.matched_question : null })
+                body: JSON.stringify({ input_sentence: message, message_id: jester ? String(jester.message_id) : "start" })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide typing indicator
+                let response = data;
+                jester = response;
+                // if(response.question_type == "sub_question"){
+                //     jester = response;
+                // }
+                // else{
+                //     jester = null;
+                // }
+                document.getElementById('typing-indicator').style.display = 'none';
+   
+                // Format bot response into a readable list and convert bold formatting
+                const formattedResponse = formatAsList(data);
+   
+                // Add bot's formatted message to the chatbox and update conversation history
+                const botMessageHTML = `
+                    <div class="bot-item">
+                        <div class="botmsg">
+                            ${formattedResponse}
+                        </div>
+                    </div>`;
+                document.getElementById('chat-box').innerHTML += botMessageHTML;
+                conversationHistory.push({ role: 'assistant', content: data.response });
+   
+                // Clear input field
+                document.getElementById('user-message').value = '';
+   
+                // Auto-scroll to the bottom of the chatbox
+                document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Hide typing indicator in case of error
+                document.getElementById('typing-indicator').style.display = 'none';
+            });
+        }
+   
+        document.getElementById('send-btn').addEventListener('click', handleSend);
+   
+        // Add event listener for Enter key press
+        document.getElementById('user-message').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent the default action (e.g., form submission)
+                handleSend();
+            }
+        });
+   
+        // Function to sanitize user input to prevent HTML injection
+        function sanitizeHTML(str) {
+            const temp = document.createElement('div');
+            temp.textContent = str;
+            return temp.innerHTML;
+        }
+   
+        // Function to format the response into a numbered list and convert bold text
+        function formatAsList(response) {
+            // // Replace ** with <strong> for bold text
+            // response = response.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+   
+            // const items = response.split(/\d\.\s/).filter(item => item.trim() !== ""); // Split by numbers followed by a dot
+            // if (items.length > 1) {
+            //     // Separate the paragraph and list items
+            //     const firstParagraph = response.split(/\d\.\s/)[0]; // Gets the first paragraph before the numbered points
+            //     const listItems = response.split(/\d\.\s/).slice(1); // Split the text after the first paragraph
+   
+            //     // Format the paragraph
+            //     let formattedResponse = `<p>${firstParagraph.trim()}</p>`;
+   
+            //     // If there are list items, format them as an ordered list
+            //     if (listItems.length > 0) {
+            //         formattedResponse += "<ol>";
+            //         listItems.forEach(item => {
+            //             formattedResponse += `<li>${item.trim()}</li>`; // Format each item
+            //         });
+            //         formattedResponse += "</ol>";
+            //     }
+   
+            //     return formattedResponse;
+            // } else {
+            //     // Otherwise, treat it as plain text
+            //     return `<p>${response}</p>`;
+            // }
+            return response.message;
+        }
+    </script>    
+</body>
+</html>
+ 
+ 

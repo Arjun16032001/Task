@@ -29,7 +29,7 @@
     "entities": ["grade", "current_academic_year"],
     "sub_questions": {
       "current_academic_year": "Could you please provide the academic year? (eg: 2023-2024) : ",
-      "grade": "Could you please provide the grade? (eg: 11th Grade) : "
+      "grade": "Could you please provide the grade? (eg: 11) : "
     },
     "type": {
       "current_academic_year": "DATE",
@@ -42,7 +42,7 @@
     "entities": ["grade", "current_academic_year"],
     "sub_questions": {
       "current_academic_year": "Could you please provide the academic year? (eg: 2023-2024) : ",
-      "grade": "Could you please provide the grade? (eg: 11th Grade) : "
+      "grade": "Could you please provide the grade? (eg: 11) : "
     },
     "type": {
       "current_academic_year": "ACADEMIC_YEAR",
@@ -50,12 +50,12 @@
     }
   },
   {
-    "question": "What is fee details for the academic year 2023-24 for 11th Standard?",
+    "question": "What is fee details for the academic year 2023-24 for grade 11?",
     "answer": "Select * from fee where grade is {grade} and current_academic_year is {current_academic_year}",
     "entities": ["grade", "current_academic_year"],
     "sub_questions": {
       "current_academic_year": "Could you please provide the academic year? (eg: 2023-2024) : ",
-      "grade": "Could you please provide the grade? (eg: 11th Grade) : "
+      "grade": "Could you please provide the grade? (eg: 11) : "
     },
     "type": {
       "current_academic_year": "DATE",
@@ -68,7 +68,9 @@
     "entities": []
   },
   {
-    "question": "Hi",
-    "answer": "Hi how can I help you"
+    "question": "hi",
+    "answer": "Hi how can I help you",
+    "entities":[]
   }
 ]
+
