@@ -63,11 +63,6 @@
     }
   },
   {
-    "question": "What is the total number of students",
-    "answer": "Select count(*) from students",
-    "entities": []
-  },
-  {
     "question": "hi",
     "answer": "Hi how can I help you",
     "entities":[]

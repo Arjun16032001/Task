@@ -8,6 +8,8 @@ import logging
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from chat import insert_chat, get_chat
+from sentence_transformers import SentenceTransformer, util
+import torch
 
 
 # Request body model for input
@@ -22,6 +24,8 @@ class SentenceRequest(BaseModel):
 # Load the model once at the beginning of your script
 nlp = spacy.load("model-best")
 nlp1 = spacy.load("en_core_web_md")
+# Load the model once at the beginning of your script
+model = SentenceTransformer('all-MiniLM-L6-v2')
 
 app = FastAPI()
 
@@ -50,9 +54,29 @@ def load_json(file_path):
     except json.JSONDecodeError:
         print(f"Error decoding JSON from the file: {file_path}")
         return []
-
+    
+# # Function to get the most similar question
+# def get_most_similar_question(user_input, json_data, threshold=0.8):
+#     # Encode the user input and the questions from json_data
+#     user_input_embedding = model.encode(user_input, convert_to_tensor=True)
+   
+#     # Create a list of question embeddings
+#     questions = [item["question"] for item in json_data]
+   
+#     questions_embeddings = model.encode(questions, convert_to_tensor=True)
+#     # Calculate cosine similarities
+#     cosine_scores = util.pytorch_cos_sim(user_input_embedding, questions_embeddings)
+ 
+#     # Get the best match
+#     best_score, best_index = torch.max(cosine_scores, dim=1)
+   
+#     # Check if the best score meets the threshold
+#     if best_score < threshold:
+#         return None  # No match found
+ 
+#     return json_data[best_index.item()]  # Return the best matched question
 # Function to get the most similar question
-def get_most_similar_question(user_input, json_data, threshold=0.6):
+def get_most_similar_question(user_input, json_data, threshold=0.8):
     user_input_doc = nlp1(user_input)
     
     best_score = 0.0
@@ -202,7 +226,8 @@ def handle_query1(user_input):
  
     # Check if a match was found
     if matched_question is None:
-        return "I'm sorry, but I couldn't find an answer to your question. Can you please rephrase it?"
+        return {"status": "success", "message_id":"start", "message": "I'm sorry, but I couldn't find an answer to your question. Can you please rephrase it?"}
+        
    
     print(f"Matched Question: {matched_question["question"]}")
  
@@ -236,6 +261,9 @@ def handle_sub_question(user_input, entity, entities, matched_question):
 async def process_sentence(request: SentenceRequest):
     input_sentence = request.input_sentence
     message_id = request.message_id
+
+    if input_sentence.lower()=="exit":
+        return {"status": "success", "message": "Thank you for chatting! Goodbye!"}
  
     if(message_id == "start" ):
         question_type = "question"
